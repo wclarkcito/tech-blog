@@ -37,4 +37,37 @@ router.get('/signup', (req, res) => {
 
     res.render('signup');
 });
+router.get('/dashboard', (req, res) => {
+    if (req.session.logged_in) {
+        res.redirect('/');
+        return;
+    }
+
+    res.render('dashboard');
+});
+router.get('/singlepost', (req, res) => {
+    if (req.session.logged_in) {
+        res.redirect('/');
+        return;
+    }
+
+    res.render('singlepost');
+});
+router.get('/create-post', (req, res) => {
+    if (req.session.logged_in) {
+        res.redirect('/');
+        return;
+    }
+
+    res.render('create-post');
+});
+
+
+
+
+
+
+
+
+
 module.exports = router;
