@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
+const Blog = require('../../models/blogs');
 
 
 router.get('/', (req, res) => {
@@ -32,20 +33,62 @@ router.post("/", withAuth, (req, res) => {
 
 
 
-// router.get('/:id', (req, res) => {
+router.get('/:id', (req, res) => {
 
-//     Product.findOne({
-//         where: {
-//             id: req.params.id
-//         },
-//         attributes: ["id", "content", "title", "created_at"],
-//         include: [
-//             attributes: ["username"], {
-//                 model: User,
+    Product.findOne({
+        where: {
+            id: req.params.id
+        },
+        attributes: ["id", "title", "body", "created_at", "updated_at"],
+        include: [{
+            attributes: ["username"],
+            model: User,
 
-//             }
-//         ]
-//     }).then((blog) => {
-//         res.json(blog);
-//     });
-// });
+        }
+
+        ]
+    }).then((blogData) => {
+        res.json(blogData);
+    });
+});
+
+
+
+
+
+router.put('/:id', (req, res) => {
+
+    Blog.update({
+        category_name: req.body.body
+    },
+        {
+            where: {
+                id: req.params.id
+            }
+        })
+        .then((postData) => {
+            res.status(200).json(blogData);
+
+        }).catch(err => {
+            res.status(400).json(err)
+        });
+
+});
+
+router.delete('/:id', (req, res) => {
+
+    Blog.destroy({
+        where: {
+            id: req.params.id,
+        }
+    })
+
+        .then((deletedCategory) => {
+            res.status(200).json(deletedCategory);
+
+        }).catch(err => {
+            res.status(400).json(err)
+        });
+});
+
+module.exports = router;

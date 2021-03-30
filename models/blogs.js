@@ -18,6 +18,14 @@ Blog.init(
 
         body: {
             type: DataTypes.STRING,
+        },
+
+        created_at: {
+            type: DataTypes.INTEGER,
+
+        },
+        updated_at: {
+            type: DataTypes.INTEGER,
         }
 
     },
