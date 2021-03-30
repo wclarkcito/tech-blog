@@ -66,7 +66,7 @@ router.put('/:id', (req, res) => {
                 id: req.params.id
             }
         })
-        .then((postData) => {
+        .then((blogData) => {
             res.status(200).json(blogData);
 
         }).catch(err => {
@@ -83,8 +83,8 @@ router.delete('/:id', (req, res) => {
         }
     })
 
-        .then((deletedCategory) => {
-            res.status(200).json(deletedCategory);
+        .then((deletedBlog) => {
+            res.status(200).json(deletedBlog);
 
         }).catch(err => {
             res.status(400).json(err)
