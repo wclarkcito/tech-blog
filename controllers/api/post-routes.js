@@ -34,24 +34,24 @@ router.post("/", withAuth, (req, res) => {
 
 
 
-router.get('/:id', (req, res) => {
+// router.get('/:id', (req, res) => {
 
-    Product.findOne({
-        where: {
-            id: req.params.id
-        },
-        attributes: ["id", "title", "body", "created_at", "updated_at"],
-        include: [{
-            attributes: ["username"],
-            model: User,
+//     Product.findOne({
+//         where: {
+//             id: req.params.id
+//         },
+//         attributes: ["id", "title", "body", "created_at", "updated_at"],
+//         include: [{
+//             attributes: ["username"],
+//             model: User,
 
-        }
+//         }
 
-        ]
-    }).then((blogData) => {
-        res.json(blogData);
-    });
-});
+//         ]
+//     }).then((blogData) => {
+//         res.json(blogData);
+//     });
+// });
 
 
 

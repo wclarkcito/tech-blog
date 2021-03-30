@@ -62,6 +62,24 @@ router.get('/create-post', (req, res) => {
     res.render('create-post');
 });
 
+router.get('/:id', (req, res) => {
+
+    Product.findOne({
+        where: {
+            id: req.params.id
+        },
+        attributes: ["id", "title", "body", "created_at", "updated_at"],
+        include: [{
+            attributes: ["username"],
+            model: User,
+
+        }
+
+        ]
+    }).then((blogData) => {
+        res.json(blogData);
+    });
+});
 
 
 
