@@ -22,10 +22,19 @@ Blog.init(
 
         created_at: {
             type: DataTypes.INTEGER,
-
+            allowNull: false,
+            references: {
+                model: 'post',
+                key: 'id'
+            }
         },
         updated_at: {
             type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'post',
+                key: 'id'
+            }
         }
 
     },
