@@ -1,35 +1,32 @@
 const router = require('express').Router();
-const { User, Post, Comment } = require('../../models');
-const Blog = require('../../models/blogs');
-const withAuth = require('../utils/auth');
 
-
-router.get('/', (req, res) => {
-
-
-    Product.findAll({
-        include: [User, Post, Comment]
-    }).then((blogData) => {
-        res.json(blogData);
-    });
-
-
-});
+// const { Session } = require('express-session');
+const { Blogs } = require('../../models');
+// const Blog = require('../../models/blogs');
+const withAuth = require('../../utils/auth');
 
 
 
-router.post("/", withAuth, (req, res) => {
 
-    Post.create({
-        title: req.body.title,
-        content: req.body.post_content,
-        user_id: req.session.user_id
-    })
-        .then((postData) => res.json(postData))
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
+
+
+router.post("/", withAuth, async (req, res) => {
+    try {
+        const newPost = await
+            Blogs.create({
+                title: req.body.title,
+                body: req.body.post_content,
+                user_id: req.session.user_id
+            })
+        res.json(newPost)
+        // .then((postData) => res.json(postData))
+        // .catch((err) => {
+        //     console.log(err);
+        //     res.status(500).json(err);
+        // });
+    } catch (err) {
+        res.status(500).json(err)
+    }
 });
 
 
@@ -57,23 +54,31 @@ router.post("/", withAuth, (req, res) => {
 
 
 
-router.put('/:id', (req, res) => {
+router.put('/:id', withAuth, async (req, res) => {
+    try {
+        const [affectedRows] = await Blogs.update(req.body,
 
-    Blog.update({
-        category_name: req.body.body
-    },
-        {
-            where: {
-                id: req.params.id
-            }
-        })
-        .then((blogData) => {
-            res.status(200).json(blogData);
+            {
+                where: {
+                    id: req.params.id
+                }
+            })
 
-        }).catch(err => {
-            res.status(400).json(err)
-        });
+        if (affectedRows > 0) {
+            res.status(200).end()
 
+        } else {
+            res.status(404).end()
+        }
+        // .then((blogData) => {
+        //     res.status(200).json(blogData);
+
+        // }).catch(err => {
+        //     res.status(400).json(err)
+        // });
+    } catch (err) {
+        res.status(500).json(err)
+    }
 });
 
 router.delete('/:id', (req, res) => {

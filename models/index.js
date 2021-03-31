@@ -1,45 +1,44 @@
 const User = require('./User');
 const Blogs = require('./blogs');
-const Session = require('./session');
+const Comment = require('./comments');
 
 
 
-User.hasMany(Blogs, {
-    foreignKey: `user_id`,
+// User.hasMany(Blogs, {
+//     foreignKey: `user_id`,
 
-})
+// })
 
-User.hasMany(Session, {
-    foreignKey: `user_id`,
-    // onDelete: 'CASCADE',
-})
+// User.hasMany(Session, {
+//     foreignKey: `user_id`,
+//      onDelete: 'CASCADE',
+// })
 
 Blogs.belongsTo(User, {
-    through: ProductTag,
-    foreignKey: `user_id`,
+    foreignKey: `id`,
+    onDelete: 'CASCADE',
 });
 
-Blogs.hasMany(Session, {
-    through: ProductTag,
-    foreignKey: `blogs_id`,
+Blogs.hasMany(Comment, {
+    foreignKey: `id`,
+    onDelete: 'CASCADE',
 });
 
-Session.belongsto(User, {
-    through: ProductTag,
-    foreignKey: `blogs_id`,
+Comment.belongsTo(User, {
+    foreignKey: `id`,
+    onDelete: 'CASCADE',
 });
 
-Session.hasMany(Blogs, {
-    through: ProductTag,
-    foreignKey: `blogs_id`,
-});
+// Session.hasMany(Blogs, {
+//     foreignKey: `blogs_id`,
+// });
 
 
 
 module.exports = {
     User,
     Blogs,
-    Session,
+    Comment,
 
 };
 // Product.belongsTo(Category, {

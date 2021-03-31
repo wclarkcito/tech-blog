@@ -12,7 +12,7 @@ router.post('/login', async (req, res) => {
             return;
         }
 
-        const validPassword = await userData.checkPassword(req.body.password);
+        const validPassword = userData.checkPassword(req.body.password);
 
         if (!validPassword) {
             res
@@ -24,6 +24,7 @@ router.post('/login', async (req, res) => {
         req.session.save(() => {
             req.session.user_id = userData.id;
             req.session.logged_in = true;
+            req.session.email = userData.email;
 
             res.json({ user: userData, message: 'You are now logged in!' });
         });

@@ -1,19 +1,30 @@
 const router = require('express').Router();
+const { Session } = require('express-session');
 const { User } = require('../models');
+const Blog = require('../models/blogs');
 const withAuth = require('../utils/auth');
 
 router.get('/', withAuth, async (req, res) => {
     try {
-        const userData = await User.findAll({
-            attributes: { exclude: ['password'] },
-            order: [['name', 'ASC']],
-        });
+        const blogData = await
 
-        const users = userData.map((project) => project.get({ plain: true }));
+
+            Blog.findAll({
+                include: [User]
+            })
+        // .then((blogData) => {
+        //     res.json(blogData);
+        // });
+
+        const blogs = blogData.map((blog) => blog.get({ plain: true }));
+
+
+        // const users = userData.map((project) => project.get({ plain: true }));
 
         res.render('homepage', {
-            users,
-            logged_in: req.session.logged_in,
+            blogs
+            // users,
+            // logged_in: req.session.logged_in,
         });
     } catch (err) {
         res.status(500).json(err);
@@ -37,49 +48,81 @@ router.get('/signup', (req, res) => {
 
     res.render('signup');
 });
+router.get('/homepage', (req, res) => {
+    if (req.session.logged_in) {
+        res.redirect('/');
+        return;
+    }
+
+    res.render('signup');
+});
 router.get('/dashboard', (req, res) => {
     if (req.session.logged_in) {
         res.redirect('/');
         return;
     }
 
-    res.render('dashboard');
+    res.render('homepage');
 });
-router.get('/singlepost', (req, res) => {
-    if (req.session.logged_in) {
-        res.redirect('/');
-        return;
-    }
+router.get('/singlepost/:id', async (req, res) => {
 
-    res.render('singlepost');
-});
-router.get('/create-post', (req, res) => {
-    if (req.session.logged_in) {
-        res.redirect('/');
-        return;
-    }
+    // if (req.session.logged_in) {
+    //     res.redirect('/');
+    //     return;
+    // }
 
-    res.render('create-post');
-});
+    try {
+        const blog = await Blog.findOne({
+            where: {
+                id: req.params.id
 
-router.get('/:id', (req, res) => {
-
-    Product.findOne({
-        where: {
-            id: req.params.id
-        },
-        attributes: ["id", "title", "body", "created_at", "updated_at"],
-        include: [{
-            attributes: ["username"],
-            model: User,
-
+            },
+            include: [User, {
+                model: Session,
+                include: [User]
+            }]
+        });
+        if (blog) {
+            const actualBlog = blog.get({ plain: true })
+            res.render('singlepost', {
+                actualBlog
+            })
+        } else {
+            res.status(404).end()
         }
 
-        ]
-    }).then((blogData) => {
-        res.json(blogData);
-    });
+    } catch (err) {
+        res.status(500).json(err)
+    }
+
+    // attributes: ["id", "title", "body", "created_at", "updated_at"],
+
+    //     {
+    //     attributes: ["username"],
+    //     model: User,
+
+    // }
+
+
+    // }).then((blogData) => {
+    //     res.render('singlepost', {
+    //         blogData
+    //     });
 });
+
+
+// res.render('singlepost');
+// });
+// router.get('/create-post', (req, res) => {
+//     if (req.session.logged_in) {
+//         res.redirect('/');
+//         return;
+//     }
+
+//     res.render('create-post');
+// });
+
+
 
 
 
