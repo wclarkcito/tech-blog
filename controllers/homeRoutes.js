@@ -62,7 +62,7 @@ router.get('/dashboard', (req, res) => {
         return;
     }
 
-    res.render('homepage');
+    res.render('dashboard');
 });
 router.get('/singlepost/:id', async (req, res) => {
 

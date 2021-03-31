@@ -44,4 +44,26 @@ router.post('/logout', (req, res) => {
     }
 });
 
+
+router.post('/', async (req, res) => {
+    try {
+        console.log('hello')
+        const newUser = await User.create({ email: req.body.email, password: req.body.password, });
+
+
+
+
+        req.session.save(() => {
+            req.session.user_id = newUser.id;
+            req.session.logged_in = true;
+            req.session.email = newUser.email;
+
+            res.json(newUser);
+        });
+
+    } catch (err) {
+        res.status(400).json(err);
+    }
+});
+
 module.exports = router;

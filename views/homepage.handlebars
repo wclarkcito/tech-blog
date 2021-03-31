@@ -1,3 +1,9 @@
-<h1>
-    start here
-</h1>
+<h1>Homepage</h1>
+
+<ul class="post-list">
+    {{#each posts as |post|}}
+    <li>
+        {{> post-info post }}
+    </li>
+    {{/each}}
+</ul>

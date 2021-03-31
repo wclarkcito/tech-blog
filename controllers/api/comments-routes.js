@@ -12,11 +12,7 @@ router.post("/", withAuth, async (req, res) => {
             user_id: req.session.user_id
         })
         res.json(newComment)
-        // .then((postData) => res.json(postData))
-        // .catch((err) => {
-        //     console.log(err);
-        //     res.status(500).json(err);
-        // });
+
 
     } catch (err) {
         res.status(500).json(err)

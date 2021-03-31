@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
+// const { json } = require('sequelize/types');
 // const { Session } = require('express-session');
 const { Blogs } = require('../../models');
 // const Blog = require('../../models/blogs');
@@ -19,36 +20,13 @@ router.post("/", withAuth, async (req, res) => {
                 user_id: req.session.user_id
             })
         res.json(newPost)
-        // .then((postData) => res.json(postData))
-        // .catch((err) => {
-        //     console.log(err);
-        //     res.status(500).json(err);
-        // });
+
     } catch (err) {
         res.status(500).json(err)
     }
 });
 
 
-
-// router.get('/:id', (req, res) => {
-
-//     Product.findOne({
-//         where: {
-//             id: req.params.id
-//         },
-//         attributes: ["id", "title", "body", "created_at", "updated_at"],
-//         include: [{
-//             attributes: ["username"],
-//             model: User,
-
-//         }
-
-//         ]
-//     }).then((blogData) => {
-//         res.json(blogData);
-//     });
-// });
 
 
 
@@ -70,31 +48,29 @@ router.put('/:id', withAuth, async (req, res) => {
         } else {
             res.status(404).end()
         }
-        // .then((blogData) => {
-        //     res.status(200).json(blogData);
 
-        // }).catch(err => {
-        //     res.status(400).json(err)
-        // });
     } catch (err) {
         res.status(500).json(err)
     }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
+    try {
+        const [affectedRows] = Blogs.destroy({
+            where: {
+                id: req.params.id,
+            }
+        })
+        if (affectedRows > 0) {
+            res.status(200).end()
 
-    Blog.destroy({
-        where: {
-            id: req.params.id,
+        } else {
+            res.status(404).end()
         }
-    })
 
-        .then((deletedBlog) => {
-            res.status(200).json(deletedBlog);
-
-        }).catch(err => {
-            res.status(400).json(err)
-        });
+    } catch (err) {
+        res.status(500).json(err)
+    }
 });
 
 module.exports = router;
