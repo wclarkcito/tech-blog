@@ -3,6 +3,7 @@ const router = require('express').Router();
 const Blog = require('../models/blogs');
 const withAuth = require('../utils/auth');
 
+// router.get('/', async (req, res) => {
 router.get('/', withAuth, async (req, res) => {
     try {
         const blogData = await
@@ -30,7 +31,8 @@ router.get('/', withAuth, async (req, res) => {
     }
 });
 
-router.get('/new', withAuth, (req, res) => {
+router.get('/new', (req, res) => {
+    // router.get('/new', withAuth, (req, res) => {
 
 
     res.render('create-post', {
@@ -39,7 +41,8 @@ router.get('/new', withAuth, (req, res) => {
 });
 
 
-router.get('/edit/:id', withAuth, async (req, res) => {
+router.get('/edit/:id', async (req, res) => {
+    // router.get('/edit/:id', withAuth, async (req, res) => {
 
 
 

@@ -1,30 +1,28 @@
 const router = require('express').Router();
-const { Session } = require('express-session');
-const { User } = require('../models');
-const Blog = require('../models/blogs');
+// const { Session, } = require('express-session');
+const { User, Comment, Blogs } = require('../models');
+// const Blog = require('../models/blogs');
 const withAuth = require('../utils/auth');
 
-router.get('/', withAuth, async (req, res) => {
+router.get('/', async (req, res) => {
+    // router.get('/', withAuth, async (req, res) => {
     try {
         const blogData = await
 
 
-            Blog.findAll({
+            Blogs.findAll({
                 include: [User]
             })
-        // .then((blogData) => {
-        //     res.json(blogData);
-        // });
+
 
         const blogs = blogData.map((blog) => blog.get({ plain: true }));
 
 
-        // const users = userData.map((project) => project.get({ plain: true }));
+
 
         res.render('homepage', {
             blogs
-            // users,
-            // logged_in: req.session.logged_in,
+
         });
     } catch (err) {
         res.status(500).json(err);
@@ -56,29 +54,19 @@ router.get('/homepage', (req, res) => {
 
     res.render('signup');
 });
-router.get('/dashboard', (req, res) => {
-    if (req.session.logged_in) {
-        res.redirect('/');
-        return;
-    }
 
-    res.render('dashboard');
-});
 router.get('/singlepost/:id', async (req, res) => {
 
-    // if (req.session.logged_in) {
-    //     res.redirect('/');
-    //     return;
-    // }
+
 
     try {
-        const blog = await Blog.findOne({
+        const blog = await Blogs.findOne({
             where: {
                 id: req.params.id
 
             },
             include: [User, {
-                model: Session,
+                model: Comment,
                 include: [User]
             }]
         });
@@ -95,32 +83,12 @@ router.get('/singlepost/:id', async (req, res) => {
         res.status(500).json(err)
     }
 
-    // attributes: ["id", "title", "body", "created_at", "updated_at"],
-
-    //     {
-    //     attributes: ["username"],
-    //     model: User,
-
-    // }
 
 
-    // }).then((blogData) => {
-    //     res.render('singlepost', {
-    //         blogData
-    //     });
+
 });
 
 
-// res.render('singlepost');
-// });
-// router.get('/create-post', (req, res) => {
-//     if (req.session.logged_in) {
-//         res.redirect('/');
-//         return;
-//     }
-
-//     res.render('create-post');
-// });
 
 
 

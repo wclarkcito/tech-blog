@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { User } = require('../../models');
 
 router.post('/login', async (req, res) => {
+    console.log(req.body)
     try {
         const userData = await User.findOne({ where: { email: req.body.email } });
 
@@ -48,8 +49,8 @@ router.post('/logout', (req, res) => {
 router.post('/', async (req, res) => {
     try {
         console.log('hello')
-        const newUser = await User.create({ email: req.body.email, password: req.body.password, });
-
+        const newUser = await User.create({ email: req.body.email, password: req.body.password, name: req.body.name });
+        console.log(newUser)
 
 
 
@@ -62,6 +63,7 @@ router.post('/', async (req, res) => {
         });
 
     } catch (err) {
+        console.log(err)
         res.status(400).json(err);
     }
 });

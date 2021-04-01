@@ -11,7 +11,8 @@ const withAuth = require('../../utils/auth');
 
 
 
-router.post("/", withAuth, async (req, res) => {
+router.post("/", async (req, res) => {
+    // router.post("/", withAuth, async (req, res) => {
     try {
         const newPost = await
             Blogs.create({
@@ -32,7 +33,8 @@ router.post("/", withAuth, async (req, res) => {
 
 
 
-router.put('/:id', withAuth, async (req, res) => {
+router.put('/:id', async (req, res) => {
+    // router.put('/:id', withAuth, async (req, res) => {
     try {
         const [affectedRows] = await Blogs.update(req.body,
 
@@ -54,7 +56,8 @@ router.put('/:id', withAuth, async (req, res) => {
     }
 });
 
-router.delete('/:id', withAuth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
+    // router.delete('/:id', withAuth, async (req, res) => {
     try {
         const [affectedRows] = Blogs.destroy({
             where: {
